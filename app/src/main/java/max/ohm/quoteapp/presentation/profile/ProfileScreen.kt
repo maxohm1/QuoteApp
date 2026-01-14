@@ -34,6 +34,9 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -67,7 +70,21 @@ fun ProfileScreen(
 ) {
     val currentUser by viewModel.currentUser.collectAsState()
     val isLoggedIn by viewModel.isLoggedIn.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
+
+    if (uiState.showEditProfileDialog) {
+        EditProfileDialog(
+            displayName = uiState.displayName,
+            avatarUrl = uiState.newAvatarUrl,
+            displayNameError = uiState.displayNameError,
+            onDisplayNameChange = viewModel::updateDisplayName,
+            onAvatarUrlChange = viewModel::updateNewAvatarUrl,
+            onDismiss = viewModel::hideEditProfileDialog,
+            onSave = viewModel::updateProfile,
+            isLoading = uiState.isLoading
+        )
+    }
     
     LaunchedEffect(Unit) {
         viewModel.events.collectLatest { event ->
@@ -175,11 +192,12 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(32.dp))
                 
                 // Menu Items
+                // Edit Profile Menu Item
                 ProfileMenuItem(
                     icon = Icons.Default.Person,
                     title = "Edit Profile",
                     subtitle = "Update your name and avatar",
-                    onClick = { /* TODO: Edit profile */ }
+                    onClick = { viewModel.showEditProfileDialog(currentUser) }
                 )
                 
                 ProfileMenuItem(
@@ -327,4 +345,102 @@ private fun ProfileMenuItem(
             }
         }
     }
+}
+
+@Composable
+private fun EditProfileDialog(
+    displayName: String,
+    avatarUrl: String,
+    displayNameError: String?,
+    onDisplayNameChange: (String) -> Unit,
+    onAvatarUrlChange: (String) -> Unit,
+    onDismiss: () -> Unit,
+    onSave: () -> Unit,
+    isLoading: Boolean
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(
+                text = "Edit Profile",
+                fontWeight = FontWeight.Bold
+            )
+        },
+        text = {
+            Column {
+                // Avatar Preview
+                Box(
+                    modifier = Modifier
+                        .size(80.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .align(Alignment.CenterHorizontally),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (avatarUrl.isNotBlank()) {
+                        AsyncImage(
+                            model = avatarUrl,
+                            contentDescription = "Avatar Preview",
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Default.Person,
+                            contentDescription = null,
+                            modifier = Modifier.size(40.dp),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+                
+                Spacer(modifier = Modifier.height(16.dp))
+                
+                OutlinedTextField(
+                    value = displayName,
+                    onValueChange = onDisplayNameChange,
+                    label = { Text("Display Name") },
+                    singleLine = true,
+                    isError = displayNameError != null,
+                    supportingText = {
+                        if (displayNameError != null) {
+                            Text(displayNameError)
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    enabled = !isLoading
+                )
+                
+                Spacer(modifier = Modifier.height(12.dp))
+                
+                OutlinedTextField(
+                    value = avatarUrl,
+                    onValueChange = onAvatarUrlChange,
+                    label = { Text("Avatar URL (optional)") },
+                    placeholder = { Text("https://example.com/avatar.jpg") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    enabled = !isLoading
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = onSave,
+                enabled = !isLoading
+            ) {
+                Text(if (isLoading) "Saving..." else "Save")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = onDismiss,
+                enabled = !isLoading
+            ) {
+                Text("Cancel")
+            }
+        }
+    )
 }

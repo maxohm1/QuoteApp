@@ -28,7 +28,9 @@ data class AuthUiState(
     val passwordError: String? = null,
     val confirmPasswordError: String? = null,
     val displayNameError: String? = null,
-    val resetEmailSent: Boolean = false
+    val resetEmailSent: Boolean = false,
+    val showEditProfileDialog: Boolean = false,
+    val newAvatarUrl: String = ""
 )
 
 sealed interface AuthEvent {
@@ -183,6 +185,62 @@ class AuthViewModel @Inject constructor(
                 is Resource.Loading -> {}
             }
         }
+    }
+    
+    fun updateProfile() {
+        val state = _uiState.value
+        
+        if (state.displayName.isBlank()) {
+            _uiState.update { it.copy(displayNameError = "Display name cannot be empty") }
+            return
+        }
+        
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true, error = null) }
+            
+            // We use the displayName from state, and assume a new field for avatarUrl or reuse existing logic if needed.
+            // But wait, the state object doesn't have a specific `avatarUrl` field for editing distinct from the user's current one.
+            // Let's add `newAvatarUrl` to the state first.
+             when (val result = authRepository.updateProfile(state.displayName, state.newAvatarUrl)) {
+                is Resource.Success -> {
+                    _uiState.update { 
+                        it.copy(
+                            isLoading = false,
+                            showEditProfileDialog = false
+                        )
+                    }
+                    _events.emit(AuthEvent.ShowMessage("Profile updated successfully"))
+                }
+                is Resource.Error -> {
+                    _uiState.update { 
+                        it.copy(
+                            isLoading = false, 
+                            error = result.message ?: "Profile update failed"
+                        ) 
+                    }
+                }
+                is Resource.Loading -> {}
+            }
+        }
+    }
+
+    fun showEditProfileDialog(currentUser: User?) {
+        _uiState.update { 
+            it.copy(
+                showEditProfileDialog = true,
+                displayName = currentUser?.displayName ?: "",
+                newAvatarUrl = currentUser?.avatarUrl ?: "", // Using a new field for editing
+                displayNameError = null
+            ) 
+        }
+    }
+
+    fun hideEditProfileDialog() {
+        _uiState.update { it.copy(showEditProfileDialog = false) }
+    }
+    
+    fun updateNewAvatarUrl(url: String) {
+        _uiState.update { it.copy(newAvatarUrl = url) }
     }
     
     fun signOut() {
