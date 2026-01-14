@@ -81,6 +81,12 @@ val LoveColor = Color(0xFFEC4899)
 val SuccessColor = Color(0xFF10B981)
 val WisdomColor = Color(0xFF8B5CF6)
 val HumorColor = Color(0xFFFACC15)
+val LifeColor = Color(0xFF06B6D4)
+val HappinessColor = Color(0xFFFBBF24)
+val FriendshipColor = Color(0xFF8B5CF6)
+val LeadershipColor = Color(0xFF6366F1)
+val CreativityColor = Color(0xFFD946EF)
+val CourageColor = Color(0xFFEF4444)
 
 // Status colors
 val SuccessGreen = Color(0xFF22C55E)

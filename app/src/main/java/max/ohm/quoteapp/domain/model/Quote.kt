@@ -18,7 +18,13 @@ enum class QuoteCategory(val displayName: String) {
     LOVE("Love"),
     SUCCESS("Success"),
     WISDOM("Wisdom"),
-    HUMOR("Humor");
+    HUMOR("Humor"),
+    LIFE("Life"),
+    HAPPINESS("Happiness"),
+    FRIENDSHIP("Friendship"),
+    LEADERSHIP("Leadership"),
+    CREATIVITY("Creativity"),
+    COURAGE("Courage");
 
     companion object {
         fun fromString(value: String): QuoteCategory {

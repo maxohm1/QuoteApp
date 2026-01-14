@@ -1,5 +1,5 @@
 -- QuoteVault Seed Data
--- 100+ inspiring quotes across 5 categories
+-- 115+ inspiring quotes across 11 categories
 
 -- MOTIVATION (25 quotes)
 INSERT INTO quotes (text, author, category) VALUES
@@ -120,6 +120,84 @@ INSERT INTO quotes (text, author, category) VALUES
 ('If you think nobody cares if you''re alive, try missing a couple of car payments.', 'Earl Wilson', 'HUMOR'),
 ('A day without sunshine is like, you know, night.', 'Steve Martin', 'HUMOR'),
 ('I''m writing a book. I''ve got the page numbers done.', 'Steven Wright', 'HUMOR');
+
+-- LIFE (10 quotes)
+INSERT INTO quotes (text, author, category) VALUES
+('Life is what happens when you are busy making other plans.', 'John Lennon', 'LIFE'),
+('The purpose of life is not to be happy but to matter.', 'Leo Rosten', 'LIFE'),
+('Life is really simple, but we insist on making it complicated.', 'Confucius', 'LIFE'),
+('In the end, it is not the years in your life that count. It is the life in your years.', 'Abraham Lincoln', 'LIFE'),
+('Life is either a daring adventure or nothing at all.', 'Helen Keller', 'LIFE'),
+('The good life is one inspired by love and guided by knowledge.', 'Bertrand Russell', 'LIFE'),
+('Life is 10 percent what happens to you and 90 percent how you react to it.', 'Charles Swindoll', 'LIFE'),
+('Life is not measured by the breaths we take, but by the moments that take our breath away.', 'Maya Angelou', 'LIFE'),
+('The biggest adventure you can take is to live the life of your dreams.', 'Oprah Winfrey', 'LIFE'),
+('Life shrinks or expands in proportion to ones courage.', 'Anais Nin', 'LIFE');
+
+-- HAPPINESS (10 quotes)
+INSERT INTO quotes (text, author, category) VALUES
+('Happiness is not something ready made. It comes from your own actions.', 'Dalai Lama', 'HAPPINESS'),
+('The happiest people do not have the best of everything, they make the best of everything.', 'Unknown', 'HAPPINESS'),
+('Happiness is when what you think, what you say, and what you do are in harmony.', 'Mahatma Gandhi', 'HAPPINESS'),
+('The secret of happiness is not in doing what one likes, but in liking what one does.', 'James Barrie', 'HAPPINESS'),
+('Happiness depends upon ourselves.', 'Aristotle', 'HAPPINESS'),
+('The only way to find true happiness is to risk being completely cut open.', 'Chuck Palahniuk', 'HAPPINESS'),
+('Happiness is a warm puppy.', 'Charles Schulz', 'HAPPINESS'),
+('The greatest happiness you can have is knowing that you do not necessarily require happiness.', 'William Saroyan', 'HAPPINESS'),
+('Happiness is not a goal, it is a by-product.', 'Eleanor Roosevelt', 'HAPPINESS'),
+('Count your age by friends, not years. Count your life by smiles, not tears.', 'John Lennon', 'HAPPINESS');
+
+-- FRIENDSHIP (10 quotes)
+INSERT INTO quotes (text, author, category) VALUES
+('A friend is someone who knows all about you and still loves you.', 'Elbert Hubbard', 'FRIENDSHIP'),
+('Friendship is born at that moment when one person says to another: What! You too?', 'C.S. Lewis', 'FRIENDSHIP'),
+('A real friend is one who walks in when the rest of the world walks out.', 'Walter Winchell', 'FRIENDSHIP'),
+('True friendship comes when the silence between two people is comfortable.', 'David Tyson', 'FRIENDSHIP'),
+('Friends are the family you choose.', 'Jess C. Scott', 'FRIENDSHIP'),
+('The only way to have a friend is to be one.', 'Ralph Waldo Emerson', 'FRIENDSHIP'),
+('A friend is one that knows you as you are and loves you anyway.', 'Elbert Hubbard', 'FRIENDSHIP'),
+('Friendship is the hardest thing in the world to explain.', 'Muhammad Ali', 'FRIENDSHIP'),
+('Walking with a friend in the dark is better than walking alone in the light.', 'Helen Keller', 'FRIENDSHIP'),
+('Friends show their love in times of trouble, not in happiness.', 'Euripides', 'FRIENDSHIP');
+
+-- LEADERSHIP (10 quotes)
+INSERT INTO quotes (text, author, category) VALUES
+('A leader is one who knows the way, goes the way, and shows the way.', 'John C. Maxwell', 'LEADERSHIP'),
+('The greatest leader is not necessarily one who does the greatest things.', 'Ronald Reagan', 'LEADERSHIP'),
+('Leadership is not about being in charge. It is about taking care of those in your charge.', 'Simon Sinek', 'LEADERSHIP'),
+('Before you are a leader, success is all about growing yourself.', 'Jack Welch', 'LEADERSHIP'),
+('The task of leadership is not to put greatness into people, but to elicit it.', 'John Buchan', 'LEADERSHIP'),
+('A good leader takes a little more than his share of the blame.', 'Arnold Glasow', 'LEADERSHIP'),
+('Leadership is the capacity to translate vision into reality.', 'Warren Bennis', 'LEADERSHIP'),
+('The art of leadership is saying no, not saying yes.', 'Tony Blair', 'LEADERSHIP'),
+('Great leaders are not defined by the absence of weakness, but by the presence of strength.', 'John Zenger', 'LEADERSHIP'),
+('You do not lead by hitting people over the head. That is assault, not leadership.', 'Dwight Eisenhower', 'LEADERSHIP');
+
+-- CREATIVITY (10 quotes)
+INSERT INTO quotes (text, author, category) VALUES
+('Creativity is intelligence having fun.', 'Albert Einstein', 'CREATIVITY'),
+('The chief enemy of creativity is good sense.', 'Pablo Picasso', 'CREATIVITY'),
+('Creativity takes courage.', 'Henri Matisse', 'CREATIVITY'),
+('To live a creative life, we must lose our fear of being wrong.', 'Joseph Chilton Pearce', 'CREATIVITY'),
+('Creativity is inventing, experimenting, growing, taking risks, breaking rules.', 'Mary Lou Cook', 'CREATIVITY'),
+('The desire to create is one of the deepest yearnings of the human soul.', 'Dieter Uchtdorf', 'CREATIVITY'),
+('Creativity is allowing yourself to make mistakes. Art is knowing which ones to keep.', 'Scott Adams', 'CREATIVITY'),
+('Every child is an artist. The problem is how to remain an artist once we grow up.', 'Pablo Picasso', 'CREATIVITY'),
+('Creativity is contagious. Pass it on.', 'Albert Einstein', 'CREATIVITY'),
+('The creative adult is the child who survived.', 'Ursula LeGuin', 'CREATIVITY');
+
+-- COURAGE (10 quotes)
+INSERT INTO quotes (text, author, category) VALUES
+('Courage is not the absence of fear, but rather the judgment that something else is more important.', 'Ambrose Redmoon', 'COURAGE'),
+('You gain strength, courage, and confidence by every experience in which you really stop to look fear in the face.', 'Eleanor Roosevelt', 'COURAGE'),
+('It takes courage to grow up and become who you really are.', 'E.E. Cummings', 'COURAGE'),
+('Courage is resistance to fear, mastery of fear, not absence of fear.', 'Mark Twain', 'COURAGE'),
+('Have the courage to follow your heart and intuition.', 'Steve Jobs', 'COURAGE'),
+('Life shrinks or expands in proportion to ones courage.', 'Anais Nin', 'COURAGE'),
+('Courage is what it takes to stand up and speak. Courage is also what it takes to sit down and listen.', 'Winston Churchill', 'COURAGE'),
+('Success is not final, failure is not fatal: it is the courage to continue that counts.', 'Winston Churchill', 'COURAGE'),
+('Without courage, wisdom bears no fruit.', 'Baltasar Gracian', 'COURAGE'),
+('He who is not courageous enough to take risks will accomplish nothing in life.', 'Muhammad Ali', 'COURAGE');
 
 -- Enable Row Level Security
 ALTER TABLE quotes ENABLE ROW LEVEL SECURITY;

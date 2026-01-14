@@ -55,6 +55,12 @@ import max.ohm.quoteapp.ui.theme.LoveColor
 import max.ohm.quoteapp.ui.theme.MotivationColor
 import max.ohm.quoteapp.ui.theme.SuccessColor
 import max.ohm.quoteapp.ui.theme.WisdomColor
+import max.ohm.quoteapp.ui.theme.LifeColor
+import max.ohm.quoteapp.ui.theme.HappinessColor
+import max.ohm.quoteapp.ui.theme.FriendshipColor
+import max.ohm.quoteapp.ui.theme.LeadershipColor
+import max.ohm.quoteapp.ui.theme.CreativityColor
+import max.ohm.quoteapp.ui.theme.CourageColor
 
 @Composable
 fun QuoteCard(
@@ -178,6 +184,12 @@ fun DailyQuoteCard(
         QuoteCategory.SUCCESS -> GradientForest
         QuoteCategory.WISDOM -> GradientOcean
         QuoteCategory.HUMOR -> GradientBlue
+        QuoteCategory.LIFE -> GradientOcean
+        QuoteCategory.HAPPINESS -> GradientSunset
+        QuoteCategory.FRIENDSHIP -> GradientPurple
+        QuoteCategory.LEADERSHIP -> GradientBlue
+        QuoteCategory.CREATIVITY -> GradientPurple
+        QuoteCategory.COURAGE -> GradientSunset
     }
     
     Card(
@@ -261,6 +273,12 @@ fun CategoryChip(
         QuoteCategory.SUCCESS -> SuccessColor
         QuoteCategory.WISDOM -> WisdomColor
         QuoteCategory.HUMOR -> HumorColor
+        QuoteCategory.LIFE -> LifeColor
+        QuoteCategory.HAPPINESS -> HappinessColor
+        QuoteCategory.FRIENDSHIP -> FriendshipColor
+        QuoteCategory.LEADERSHIP -> LeadershipColor
+        QuoteCategory.CREATIVITY -> CreativityColor
+        QuoteCategory.COURAGE -> CourageColor
     }
     
     Surface(
@@ -292,6 +310,12 @@ fun CategoryCard(
         QuoteCategory.SUCCESS -> SuccessColor
         QuoteCategory.WISDOM -> WisdomColor
         QuoteCategory.HUMOR -> HumorColor
+        QuoteCategory.LIFE -> LifeColor
+        QuoteCategory.HAPPINESS -> HappinessColor
+        QuoteCategory.FRIENDSHIP -> FriendshipColor
+        QuoteCategory.LEADERSHIP -> LeadershipColor
+        QuoteCategory.CREATIVITY -> CreativityColor
+        QuoteCategory.COURAGE -> CourageColor
     }
     
     val emoji = when (category) {
@@ -300,6 +324,12 @@ fun CategoryCard(
         QuoteCategory.SUCCESS -> "🏆"
         QuoteCategory.WISDOM -> "🦉"
         QuoteCategory.HUMOR -> "😄"
+        QuoteCategory.LIFE -> "🌱"
+        QuoteCategory.HAPPINESS -> "😊"
+        QuoteCategory.FRIENDSHIP -> "🤝"
+        QuoteCategory.LEADERSHIP -> "👑"
+        QuoteCategory.CREATIVITY -> "🎨"
+        QuoteCategory.COURAGE -> "💪"
     }
     
     Card(
