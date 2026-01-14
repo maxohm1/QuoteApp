@@ -13,6 +13,8 @@ import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.auth.status.SessionStatus
 import io.github.jan.supabase.postgrest.postgrest
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import max.ohm.quoteapp.data.remote.dto.InsertUserProfileDto
@@ -62,7 +64,7 @@ class AuthRepositoryImpl @Inject constructor(
             supabaseClient.auth.signUpWith(Email) {
                 this.email = email
                 this.password = password
-                this.data = buildMap {
+                this.data = buildJsonObject {
                     put("display_name", displayName)
                 }
             }
@@ -150,7 +152,7 @@ class AuthRepositoryImpl @Inject constructor(
             
             // Update user metadata
             supabaseClient.auth.updateUser {
-                this.data = buildMap {
+                this.data = buildJsonObject {
                     displayName?.let { put("display_name", it) }
                     avatarUrl?.let { put("avatar_url", it) }
                 }

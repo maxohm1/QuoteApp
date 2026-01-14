@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace = "max.ohm.quoteapp"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "max.ohm.quoteapp"
         minSdk = 28
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
