@@ -5,7 +5,13 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.unit.dp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CollectionsBookmark
 import androidx.compose.material.icons.filled.Favorite
@@ -22,6 +28,9 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -30,6 +39,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
@@ -45,9 +55,11 @@ import max.ohm.quoteapp.presentation.auth.LoginScreen
 import max.ohm.quoteapp.presentation.auth.SignUpScreen
 import max.ohm.quoteapp.presentation.collections.CollectionsScreen
 import max.ohm.quoteapp.presentation.collections.CollectionsViewModel
+import max.ohm.quoteapp.presentation.collectiondetail.CollectionDetailScreen
 import max.ohm.quoteapp.presentation.favorites.FavoritesScreen
 import max.ohm.quoteapp.presentation.home.HomeScreen
 import max.ohm.quoteapp.presentation.profile.ProfileScreen
+import max.ohm.quoteapp.presentation.quotedetail.QuoteDetailScreen
 import max.ohm.quoteapp.presentation.settings.SettingsScreen
 import max.ohm.quoteapp.presentation.share.ShareScreen
 
@@ -258,6 +270,31 @@ fun MainNavigation(
                 )
             }
             
+            composable<Screen.QuoteDetail> { backStackEntry ->
+                val quoteDetail: Screen.QuoteDetail = backStackEntry.toRoute()
+                QuoteDetailScreen(
+                    quoteId = quoteDetail.quoteId,
+                    onNavigateBack = { navController.popBackStack() },
+                    onNavigateToShare = { quoteId ->
+                        navController.navigate(Screen.ShareQuote(quoteId))
+                    }
+                )
+            }
+            
+            composable<Screen.CollectionDetail> { backStackEntry ->
+                val collectionDetail: Screen.CollectionDetail = backStackEntry.toRoute()
+                CollectionDetailScreen(
+                    collectionId = collectionDetail.collectionId,
+                    onNavigateBack = { navController.popBackStack() },
+                    onNavigateToQuoteDetail = { quoteId ->
+                        navController.navigate(Screen.QuoteDetail(quoteId))
+                    },
+                    onNavigateToShare = { quoteId ->
+                        navController.navigate(Screen.ShareQuote(quoteId))
+                    }
+                )
+            }
+            
             composable<Screen.CategoryQuotes> { backStackEntry ->
                 val categoryQuotes: Screen.CategoryQuotes = backStackEntry.toRoute()
                 // For now, navigate back - could add a dedicated category screen
@@ -288,6 +325,52 @@ fun MainNavigation(
             onCreateNew = {
                 collectionsViewModel.hideAddToCollectionDialog()
                 collectionsViewModel.showCreateDialog()
+            }
+        )
+    }
+    
+    // Create Collection Dialog (available whenever showCreateDialog is true)
+    if (collectionsUiState.showCreateDialog) {
+        AlertDialog(
+            onDismissRequest = { collectionsViewModel.hideCreateDialog() },
+            title = {
+                Text(
+                    text = "New Collection",
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            text = {
+                Column {
+                    OutlinedTextField(
+                        value = collectionsUiState.newCollectionName,
+                        onValueChange = { collectionsViewModel.updateNewCollectionName(it) },
+                        label = { Text("Collection Name") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    
+                    Spacer(modifier = Modifier.height(12.dp))
+                    
+                    OutlinedTextField(
+                        value = collectionsUiState.newCollectionDescription,
+                        onValueChange = { collectionsViewModel.updateNewCollectionDescription(it) },
+                        label = { Text("Description (optional)") },
+                        maxLines = 3,
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { collectionsViewModel.createCollection() }) {
+                    Text("Create")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { collectionsViewModel.hideCreateDialog() }) {
+                    Text("Cancel")
+                }
             }
         )
     }
