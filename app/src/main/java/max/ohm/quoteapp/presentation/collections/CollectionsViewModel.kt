@@ -177,15 +177,24 @@ class CollectionsViewModel @Inject constructor(
     }
     
     fun addQuoteToCollection(collectionId: String) {
-        val quoteId = _uiState.value.quoteToAdd ?: return
+        val quoteId = _uiState.value.quoteToAdd
+        android.util.Log.d("CollectionsVM", "addQuoteToCollection called - collectionId: $collectionId, quoteId: $quoteId")
+        
+        if (quoteId == null) {
+            android.util.Log.e("CollectionsVM", "quoteToAdd is null!")
+            return
+        }
         
         viewModelScope.launch {
+            android.util.Log.d("CollectionsVM", "Calling repository.addQuoteToCollection")
             when (val result = collectionRepository.addQuoteToCollection(collectionId, quoteId)) {
                 is Resource.Success -> {
+                    android.util.Log.d("CollectionsVM", "Successfully added quote to collection")
                     hideAddToCollectionDialog()
                     _events.emit(CollectionsEvent.ShowMessage("Added to collection"))
                 }
                 is Resource.Error -> {
+                    android.util.Log.e("CollectionsVM", "Error adding: ${result.message}")
                     _events.emit(CollectionsEvent.ShowMessage(result.message ?: "Failed to add"))
                 }
                 else -> {}

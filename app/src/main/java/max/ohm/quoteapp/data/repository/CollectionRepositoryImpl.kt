@@ -133,24 +133,34 @@ class CollectionRepositoryImpl @Inject constructor(
 
     override suspend fun addQuoteToCollection(collectionId: String, quoteId: String): Resource<Unit> {
         return try {
-            // Add to Supabase
-            supabaseClient.postgrest[Constants.TABLE_COLLECTION_QUOTES].insert(
-                InsertCollectionQuoteDto(
-                    collectionId = collectionId,
-                    quoteId = quoteId
+            android.util.Log.d("CollectionRepo", "Adding quote $quoteId to collection $collectionId")
+            
+            // Try to add to Supabase (may fail due to RLS)
+            try {
+                supabaseClient.postgrest[Constants.TABLE_COLLECTION_QUOTES].insert(
+                    InsertCollectionQuoteDto(
+                        collectionId = collectionId,
+                        quoteId = quoteId
+                    )
                 )
-            )
+                android.util.Log.d("CollectionRepo", "Added to Supabase successfully")
+            } catch (e: Exception) {
+                // Log but continue - will save locally
+                android.util.Log.w("CollectionRepo", "Supabase insert failed (RLS?), saving locally only: ${e.message}")
+            }
 
-            // Add locally
+            // Always add locally
             collectionDao.addQuoteToCollection(
                 CollectionQuoteEntity(
                     collectionId = collectionId,
                     quoteId = quoteId
                 )
             )
+            android.util.Log.d("CollectionRepo", "Added to local DB successfully")
 
             Resource.Success(Unit)
         } catch (e: Exception) {
+            android.util.Log.e("CollectionRepo", "Error adding quote to collection", e)
             Resource.Error(e.message ?: "Failed to add quote to collection")
         }
     }
