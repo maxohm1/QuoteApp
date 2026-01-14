@@ -11,7 +11,7 @@ import max.ohm.quoteapp.data.local.entity.CollectionQuoteEntity
 
 @Dao
 interface CollectionDao {
-    @Query("SELECT * FROM collections WHERE userId = :userId ORDER BY updatedAt DESC")
+    @Query("SELECT DISTINCT c.* FROM collections c LEFT JOIN collection_quotes cq ON c.id = cq.collectionId WHERE c.userId = :userId ORDER BY c.updatedAt DESC")
     fun getCollectionsByUser(userId: String): Flow<List<CollectionEntity>>
 
     @Query("SELECT * FROM collections WHERE id = :id")
