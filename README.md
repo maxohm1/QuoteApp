@@ -1,125 +1,77 @@
 # QuoteVault 📱✨
 
-A full-featured quote discovery and collection app built with Kotlin and Jetpack Compose.
+Hey there! Welcome to **QuoteVault** - a beautiful quote app I built using Kotlin and Jetpack Compose. It's like having a pocket full of inspiration that you can carry with you everywhere!
 
-![QuoteVault Banner](https://via.placeholder.com/800x400?text=QuoteVault)
+## What Does This App Do?
 
-## 🌟 Features
+QuoteVault helps you discover, save, and share inspiring quotes. Here's what you can do with it:
 
-### Authentication & User Accounts
-- ✅ Sign up with email/password
-- ✅ Login/logout functionality
-- ✅ Password reset flow
-- ✅ User profile screen (name, avatar)
-- ✅ Session persistence (stay logged in)
+### 🔐 User Accounts
+- Sign up with your email and password
+- Login and stay logged in (no need to login every time!)
+- Forgot your password? No worries, you can reset it
+- Customize your profile with your name
 
-### Quote Browsing & Discovery
-- ✅ Home feed displaying quotes (paginated)
-- ✅ Browse quotes by category (5 categories: Motivation, Love, Success, Wisdom, Humor)
-- ✅ Search quotes by keyword
-- ✅ Search/filter by author
-- ✅ Pull-to-refresh functionality
-- ✅ Loading states and empty states handled gracefully
+### 📖 Browse Quotes
+- See a beautiful feed of quotes on the home screen
+- Browse quotes by category (Motivation, Love, Success, Wisdom, Humor, and more!)
+- Search for quotes by keyword or author name
+- Pull down to refresh and get new quotes
 
-### Favorites & Collections
-- ✅ Save quotes to favorites (heart/bookmark)
-- ✅ View all favorited quotes in a dedicated screen
-- ✅ Create custom collections (e.g., "Morning Motivation", "Work Quotes")
-- ✅ Add/remove quotes from collections
-- ✅ Cloud sync — favorites persist across devices when logged in
+### ❤️ Save Your Favorites
+- Tap the heart button to save quotes you love
+- See all your favorite quotes in one place
+- Create your own collections (like "Morning Motivation" or "Work Inspiration")
+- Your favorites sync across devices when you're logged in
 
-### Daily Quote & Notifications
-- ✅ "Quote of the Day" prominently displayed on home screen
-- ✅ Quote of the day changes daily
-- ✅ Local push notification for daily quote
-- ✅ User can set preferred notification time in settings
+### 🔔 Daily Inspiration
+- Get a fresh "Quote of the Day" every morning
+- Set a notification to remind you at your preferred time
+- Never miss your daily dose of inspiration!
 
-### Sharing & Export
-- ✅ Share quote as text via system share sheet
-- ✅ Generate shareable quote card (quote + author on styled background)
-- ✅ Save quote card as image to device
-- ✅ 6 different card styles/templates to choose from
+### 📤 Share With Friends
+- Share quotes as text to WhatsApp, Instagram, or anywhere
+- Create beautiful quote cards with styled backgrounds
+- Save quote images to your phone
+- Choose from 6 different card designs
 
-### Personalization & Settings
-- ✅ Dark mode / Light mode toggle
-- ✅ 5 accent color themes (Purple, Blue, Teal, Orange, Pink)
-- ✅ Font size adjustment for quotes (Small, Medium, Large, Extra Large)
-- ✅ Settings persist locally
+### 🎨 Make It Yours
+- Switch between Dark and Light mode
+- Pick your favorite accent color (Purple, Blue, Teal, Orange, or Pink)
+- Adjust the font size to your liking
+- Add a widget to your home screen
 
-### Widget
-- ✅ Home screen widget displaying current quote of the day
-- ✅ Widget updates daily
-- ✅ Tapping widget opens the app
+---
 
-## 🛠️ Tech Stack
+## 🚀 How to Set Up This Project
 
-| Category | Technology |
-|----------|------------|
-| **Language** | Kotlin |
-| **UI Framework** | Jetpack Compose |
-| **Architecture** | MVVM + Clean Architecture |
-| **Dependency Injection** | Hilt |
-| **Local Database** | Room |
-| **Remote Backend** | Supabase (Auth + Database) |
-| **Networking** | Ktor Client |
-| **State Management** | Kotlin Flow + StateFlow |
-| **Navigation** | Navigation Compose (Type-Safe) |
-| **Preferences** | DataStore |
-| **Image Loading** | Coil |
-| **Background Tasks** | WorkManager |
-| **Widget** | Glance |
-| **Serialization** | Kotlinx Serialization |
+### What You'll Need
+- **Android Studio** (Hedgehog version or newer)
+- **JDK 17** (Java Development Kit)
+- **Android SDK 35**
 
-## 📋 Project Structure
+### Step 1: Get the Code
 
-```
-max.ohm.quoteapp/
-├── data/
-│   ├── local/
-│   │   ├── dao/          # Room DAOs
-│   │   ├── entity/       # Room Entities
-│   │   └── QuoteDatabase.kt
-│   ├── remote/
-│   │   └── dto/          # Data Transfer Objects
-│   └── repository/       # Repository Implementations
-├── di/
-│   └── AppModule.kt      # Hilt DI Module
-├── domain/
-│   ├── model/            # Domain Models
-│   └── repository/       # Repository Interfaces
-├── presentation/
-│   ├── auth/             # Login, SignUp, ForgotPassword
-│   ├── home/             # Home Screen
-│   ├── favorites/        # Favorites Screen
-│   ├── collections/      # Collections Screen
-│   ├── profile/          # Profile Screen
-│   ├── settings/         # Settings Screen
-│   ├── share/            # Share Quote Screen
-│   ├── components/       # Reusable UI Components
-│   └── navigation/       # Navigation Graph
-├── ui/theme/             # Theme, Colors, Typography
-├── util/                 # Utilities & Constants
-├── widget/               # Home Screen Widget
-├── worker/               # Background Workers
-├── MainActivity.kt
-└── QuoteVaultApp.kt
+```bash
+git clone https://github.com/maxohm1/QuoteApp.git
 ```
 
-## 🚀 Setup Instructions
+Open this folder in Android Studio.
 
-### Prerequisites
-- Android Studio Hedgehog or later
-- JDK 17
-- Android SDK 35
+### Step 2: Set Up Supabase (The Backend)
 
-### Supabase Configuration
+This app uses **Supabase** as its backend for storing quotes and user data. Here's how to set it up:
 
-1. Create a new project at [supabase.com](https://supabase.com)
+1. **Create a Supabase Account**
+   - Go to [supabase.com](https://supabase.com) and sign up (it's free!)
+   - Create a new project and give it a name
 
-2. Create the following tables in your Supabase database:
+2. **Create the Database Tables**
+   - Go to the SQL Editor in your Supabase dashboard
+   - Copy and paste this SQL code and run it:
 
 ```sql
--- Quotes table
+-- This creates the quotes table
 CREATE TABLE quotes (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     text TEXT NOT NULL,
@@ -128,7 +80,7 @@ CREATE TABLE quotes (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Favorites table
+-- This stores user favorites
 CREATE TABLE favorites (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -137,7 +89,7 @@ CREATE TABLE favorites (
     UNIQUE(user_id, quote_id)
 );
 
--- Collections table
+-- This stores user collections
 CREATE TABLE collections (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     name TEXT NOT NULL,
@@ -147,7 +99,7 @@ CREATE TABLE collections (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Collection quotes junction table
+-- This links quotes to collections
 CREATE TABLE collection_quotes (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     collection_id UUID REFERENCES collections(id) ON DELETE CASCADE,
@@ -156,7 +108,7 @@ CREATE TABLE collection_quotes (
     UNIQUE(collection_id, quote_id)
 );
 
--- User profiles table
+-- This stores user profile info
 CREATE TABLE user_profiles (
     id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
     email TEXT NOT NULL,
@@ -166,77 +118,134 @@ CREATE TABLE user_profiles (
 );
 ```
 
-3. Enable Row Level Security (RLS) for all tables
+3. **Turn on Row Level Security**
+   - Go to each table and enable RLS (Row Level Security)
+   - This keeps user data safe and private
 
-4. Add your Supabase credentials to `local.properties`:
+4. **Add Your Supabase Keys to the App**
+   - Find your project URL and anon key in Supabase (Settings → API)
+   - Open `local.properties` in the project root
+   - Add these lines:
 
 ```properties
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_URL=https://your-project-id.supabase.co
+SUPABASE_ANON_KEY=your-anon-key-here
 ```
 
-### Seed Data
-Run the included SQL script to populate your database with 100+ quotes:
-```bash
-psql -h your-project.supabase.co -U postgres -d postgres -f seed_quotes.sql
-```
+5. **Add Some Quotes to the Database**
+   - There's a file called `seed_quotes.sql` in the `supabase` folder
+   - Run it in the Supabase SQL Editor to add 100+ quotes
 
-### Build & Run
+### Step 3: Run the App
 
-```bash
-# Clone the repository
-git clone https://github.com/maxohm1/QuoteApp.git
-
-# Open in Android Studio
-# Sync Gradle files
-# Run on emulator or device
-```
-
-## 🤖 AI Coding Approach & Workflow
-
-This project was built with extensive use of AI tools to accelerate development and produce cleaner code.
-
-### AI Tools Used
-- **Claude Code** (Primary) - Architecture design, code generation, debugging
-- **GitHub Copilot** - Code completion and suggestions
-
-### Workflow Highlights
-1. **Architecture Planning** - Used Claude to design the MVVM + Clean Architecture structure
-2. **Code Generation** - Generated boilerplate code for repositories, ViewModels, and Composables
-3. **UI Design** - Created polished UI components with AI assistance
-4. **Debugging** - Fixed issues efficiently with AI-powered debugging
-5. **Documentation** - Generated comprehensive README with AI
-
-### Effective Prompts Used
-- "Create a complete authentication flow with Supabase using Hilt for DI"
-- "Design a beautiful quote card component with gradient backgrounds and animations"
-- "Implement a type-safe navigation system with Jetpack Compose"
-
-## 🎨 Design
-
-The app features a modern, polished design with:
-- Vibrant gradient backgrounds
-- Smooth animations and transitions
-- Custom accent color themes
-- Responsive layouts
-- Glassmorphism elements
-
-## 📱 Screenshots
-
-| Home | Favorites | Settings |
-|------|-----------|----------|
-| ![Home](screenshots/home.png) | ![Favorites](screenshots/favorites.png) | ![Settings](screenshots/settings.png) |
-
-## ⚠️ Known Limitations
-
-- Widget requires manual refresh after quote update
-- Time picker for notifications uses 24-hour format only
-- Avatar upload not yet implemented
-
-## 📄 License
-
-This project is for assessment purposes only.
+- Click the green "Run" button in Android Studio
+- Choose your phone or emulator
+- That's it! The app should start running 🎉
 
 ---
 
-Made with ❤️ using AI-powered development
+## 🤖 How I Built This with AI
+
+I used AI tools to help me build this app faster and write better code. Here's my approach:
+
+### AI Tools I Used
+
+| Tool | What I Used It For |
+|------|-------------------|
+| **Google Gemini (Antigravity)** | Main coding assistant - helped with architecture, debugging, and features |
+| **GitHub Copilot** | Code completion and quick suggestions while typing |
+
+### My AI Workflow
+
+1. **Planning First** - I described what I wanted to build and asked AI to help design the app structure
+2. **Write Code Together** - AI helped me write the tricky parts like authentication, database queries, and animations
+3. **Fix Bugs Quickly** - When something broke, AI helped me figure out why and fix it fast
+4. **Polish the UI** - AI suggested animations and styling to make the app feel premium
+5. **Write Documentation** - This README was written with AI help too!
+
+### What Worked Well
+- AI was great at boilerplate code (stuff that's repetitive)
+- It understood Kotlin and Jetpack Compose really well
+- Debugging was much faster with AI explaining error messages
+- UI animations came out smooth with AI suggestions
+
+---
+
+## 🎨 Design
+
+The app has a clean, modern look with:
+- Smooth animations when you tap cards
+- Staggered list animations (cards slide in one after another)
+- Transparent bottom navigation bar
+- Dark and Light themes that actually look good
+- Beautiful gradient quote cards
+
+**Design Tools Used:**
+- The UI was inspired by modern Material Design 3 guidelines
+- Animations were implemented using Jetpack Compose animation APIs
+
+*(No Figma/Stitch designs were used - the UI was built iteratively with code)*
+
+---
+
+## 🛠️ Tech Stack
+
+Here's what's under the hood:
+
+| What | Technology |
+|------|------------|
+| **Language** | Kotlin |
+| **UI** | Jetpack Compose |
+| **Architecture** | MVVM + Clean Architecture |
+| **Dependency Injection** | Hilt |
+| **Local Database** | Room |
+| **Backend** | Supabase (Auth + PostgreSQL) |
+| **Networking** | Ktor Client |
+| **Preferences** | DataStore |
+| **Background Work** | WorkManager + AlarmManager |
+| **Widget** | Glance |
+
+---
+
+## ⚠️ Known Limitations & Incomplete Features
+
+Here's what's not perfect yet:
+
+1. **Notifications on some phones** - On Realme, Xiaomi, and other Chinese phones, you might need to disable battery optimization for notifications to work reliably
+
+2. **Widget refresh** - The home screen widget updates once a day, not in real-time
+
+3. **Time picker format** - The notification time picker uses 24-hour format only
+
+4. **Avatar upload** - Profile picture upload isn't implemented yet (shows default avatar)
+
+5. **Offline mode** - The app needs internet to fetch quotes (local caching is basic)
+
+6. **Quote of the Day** - Sometimes takes a moment to load on first open
+
+---
+
+## 📁 Project Structure
+
+```
+app/src/main/java/max/ohm/quoteapp/
+├── data/           → Database and API stuff
+├── di/             → Dependency injection setup
+├── domain/         → Business logic and models
+├── presentation/   → All the screens and UI
+├── ui/theme/       → Colors, fonts, and theming
+├── util/           → Helper functions
+├── widget/         → Home screen widget
+├── worker/         → Background jobs
+└── receiver/       → Broadcast receivers (alarms)
+```
+
+---
+
+## 📄 License
+
+This project was built for learning and assessment purposes.
+
+---
+
+Made with ❤️ and a lot of AI help!

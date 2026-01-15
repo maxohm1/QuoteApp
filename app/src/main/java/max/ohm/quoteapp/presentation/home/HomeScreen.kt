@@ -139,7 +139,7 @@ fun HomeScreen(
                                 Spacer(modifier = Modifier.height(4.dp))
                                 
                                 Text(
-                                    text = "Discover inspiring quotes",
+                                    text = "  Discover inspiring quotes",
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
