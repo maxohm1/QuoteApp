@@ -59,6 +59,8 @@ import max.ohm.quoteapp.ui.theme.OrangePrimary
 import max.ohm.quoteapp.ui.theme.PinkPrimary
 import max.ohm.quoteapp.ui.theme.PurplePrimary
 import max.ohm.quoteapp.ui.theme.TealPrimary
+import androidx.compose.ui.platform.LocalContext
+import android.app.TimePickerDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,6 +69,7 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val settings by viewModel.settings.collectAsState()
+    val context = LocalContext.current
     
     Scaffold(
         topBar = {
@@ -232,7 +235,24 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.height(12.dp))
                 
                 Card(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            val parts = settings.notificationTime.split(":")
+                            val hour = parts.getOrNull(0)?.toIntOrNull() ?: 8
+                            val minute = parts.getOrNull(1)?.toIntOrNull() ?: 0
+                            
+                            TimePickerDialog(
+                                context,
+                                { _, h, m ->
+                                    val formattedTime = String.format("%02d:%02d", h, m)
+                                    viewModel.updateNotificationTime(formattedTime)
+                                },
+                                hour,
+                                minute,
+                                false
+                            ).show()
+                        },
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.surface

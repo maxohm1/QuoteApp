@@ -17,9 +17,14 @@ import max.ohm.quoteapp.domain.model.UserSettings
 import max.ohm.quoteapp.domain.repository.SettingsRepository
 import javax.inject.Inject
 
+import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
+import max.ohm.quoteapp.util.NotificationScheduler
+
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
     
     val settings: StateFlow<UserSettings> = settingsRepository.settings
@@ -50,6 +55,13 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             val current = settingsRepository.getSettings()
             settingsRepository.updateSettings(current.copy(notificationEnabled = enabled))
+            
+            if (enabled) {
+                // Schedule with existing time
+                NotificationScheduler.scheduleDailyQuote(context, current.notificationTime)
+            } else {
+                NotificationScheduler.cancelDailyQuote(context)
+            }
         }
     }
     
@@ -57,6 +69,21 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             val current = settingsRepository.getSettings()
             settingsRepository.updateSettings(current.copy(notificationTime = time))
+            
+            if (current.notificationEnabled || true) { // Always schedule if updating time? Or only if enabled?
+                // Logic: If user changes time, they probably want it enabled or ready. 
+                // But let's check current.notificationEnabled. 
+                // Note: current.notificationEnabled might be true.
+                
+                // If it IS enabled, reschedule.
+                // If it is NOT enabled, do we schedule? No.
+                
+                // However, I should check the updated value? "current" is snapshot before update.
+                // I am updating "notificationTime". "notificationEnabled" remains same.
+                if (current.notificationEnabled) {
+                     NotificationScheduler.scheduleDailyQuote(context, time)
+                }
+            }
         }
     }
 }
