@@ -4,7 +4,9 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.Column
@@ -163,10 +165,24 @@ fun MainNavigation(
             navController = navController,
             startDestination = startDestination,
             modifier = Modifier.padding(paddingValues),
-            enterTransition = { fadeIn(animationSpec = tween(300)) },
-            exitTransition = { fadeOut(animationSpec = tween(300)) },
-            popEnterTransition = { fadeIn(animationSpec = tween(300)) },
-            popExitTransition = { fadeOut(animationSpec = tween(300)) }
+            enterTransition = { 
+                fadeIn(animationSpec = tween(300)) + slideInHorizontally(
+                    initialOffsetX = { fullWidth -> fullWidth / 4 },
+                    animationSpec = tween(300)
+                )
+            },
+            exitTransition = { 
+                fadeOut(animationSpec = tween(300)) 
+            },
+            popEnterTransition = { 
+                fadeIn(animationSpec = tween(300)) 
+            },
+            popExitTransition = { 
+                fadeOut(animationSpec = tween(300)) + slideOutHorizontally(
+                    targetOffsetX = { fullWidth -> fullWidth / 4 },
+                    animationSpec = tween(300)
+                )
+            }
         ) {
             // Auth Screens
             composable<Screen.Login> {

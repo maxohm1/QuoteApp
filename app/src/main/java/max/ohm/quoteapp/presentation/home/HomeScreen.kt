@@ -1,8 +1,12 @@
 package max.ohm.quoteapp.presentation.home
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +21,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FormatQuote
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,13 +36,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import max.ohm.quoteapp.domain.model.QuoteCategory
 import max.ohm.quoteapp.presentation.components.CategoryCard
@@ -157,7 +165,10 @@ fun HomeScreen(
                         item {
                             AnimatedVisibility(
                                 visible = uiState.searchQuery.isBlank() && uiState.dailyQuote != null,
-                                enter = fadeIn(),
+                                enter = fadeIn(animationSpec = tween(500)) + slideInVertically(
+                                    initialOffsetY = { -40 },
+                                    animationSpec = spring(stiffness = Spring.StiffnessLow)
+                                ),
                                 exit = fadeOut()
                             ) {
                                 uiState.dailyQuote?.let { quote ->
@@ -181,7 +192,7 @@ fun HomeScreen(
                         item {
                             AnimatedVisibility(
                                 visible = uiState.searchQuery.isBlank(),
-                                enter = fadeIn(),
+                                enter = fadeIn(animationSpec = tween(400)),
                                 exit = fadeOut()
                             ) {
                                 Column {
@@ -229,7 +240,7 @@ fun HomeScreen(
                         Spacer(modifier = Modifier.height(12.dp))
                     }
                     
-                    // Quotes list
+                    // Quotes list with staggered animation
                     if (uiState.quotes.isEmpty()) {
                         item {
                             EmptyState(
@@ -252,21 +263,40 @@ fun HomeScreen(
                             )
                         }
                     } else {
-                        items(
+                        itemsIndexed(
                             items = uiState.quotes,
-                            key = { it.id }
-                        ) { quote ->
-                            QuoteCard(
-                                quote = quote,
-                                modifier = Modifier
-                                    .padding(horizontal = 20.dp)
-                                    .padding(bottom = 16.dp),
-                                onFavoriteClick = { viewModel.toggleFavorite(quote) },
-                                onShareClick = { onNavigateToShare(quote.id) },
-                                onAddToCollectionClick = { onAddToCollection(quote.id) },
-                                onClick = { onNavigateToQuoteDetail(quote.id) },
-                                fontSizeScale = settings.fontSize.scale
-                            )
+                            key = { _, quote -> quote.id }
+                        ) { index, quote ->
+                            // Staggered animation for each item
+                            var visible by remember { mutableStateOf(false) }
+                            
+                            LaunchedEffect(quote.id) {
+                                delay(index * 50L) // Stagger delay
+                                visible = true
+                            }
+                            
+                            AnimatedVisibility(
+                                visible = visible,
+                                enter = fadeIn(animationSpec = tween(300)) + slideInVertically(
+                                    initialOffsetY = { 60 },
+                                    animationSpec = spring(
+                                        dampingRatio = Spring.DampingRatioLowBouncy,
+                                        stiffness = Spring.StiffnessLow
+                                    )
+                                )
+                            ) {
+                                QuoteCard(
+                                    quote = quote,
+                                    modifier = Modifier
+                                        .padding(horizontal = 20.dp)
+                                        .padding(bottom = 16.dp),
+                                    onFavoriteClick = { viewModel.toggleFavorite(quote) },
+                                    onShareClick = { onNavigateToShare(quote.id) },
+                                    onAddToCollectionClick = { onAddToCollection(quote.id) },
+                                    onClick = { onNavigateToQuoteDetail(quote.id) },
+                                    fontSizeScale = settings.fontSize.scale
+                                )
+                            }
                         }
                     }
                 }
