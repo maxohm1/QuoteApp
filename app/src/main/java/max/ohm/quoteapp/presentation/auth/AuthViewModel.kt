@@ -16,6 +16,9 @@ import max.ohm.quoteapp.domain.model.User
 import max.ohm.quoteapp.domain.repository.AuthRepository
 import max.ohm.quoteapp.util.Resource
 import javax.inject.Inject
+import android.content.Context
+import android.net.Uri
+import max.ohm.quoteapp.domain.repository.StorageRepository
 
 data class AuthUiState(
     val isLoading: Boolean = false,
@@ -39,9 +42,12 @@ sealed interface AuthEvent {
     data class ShowMessage(val message: String) : AuthEvent
 }
 
+
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val storageRepository: StorageRepository,
+    @dagger.hilt.android.qualifiers.ApplicationContext private val context: Context
 ) : ViewModel() {
     
     private val _uiState = MutableStateFlow(AuthUiState())
@@ -241,6 +247,52 @@ class AuthViewModel @Inject constructor(
     
     fun updateNewAvatarUrl(url: String) {
         _uiState.update { it.copy(newAvatarUrl = url) }
+    }
+
+    fun onAvatarPicked(uri: Uri) {
+        val userId = currentUser.value?.id ?: return
+        android.util.Log.d("AuthVM", "onAvatarPicked: $uri for user $userId")
+        
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            _uiState.update { it.copy(isLoading = true) }
+            
+            try {
+                val inputStream = context.contentResolver.openInputStream(uri)
+                val bytes = inputStream?.readBytes()
+                inputStream?.close()
+                
+                if (bytes != null) {
+                    android.util.Log.d("AuthVM", "Read ${bytes.size} bytes from image")
+                    when (val result = storageRepository.uploadProfilePicture(userId, bytes)) {
+                        is Resource.Success -> {
+                            android.util.Log.d("AuthVM", "Upload success: ${result.data}")
+                            _uiState.update { 
+                                it.copy(
+                                    isLoading = false,
+                                    newAvatarUrl = result.data ?: ""
+                                )
+                            }
+                        }
+                        is Resource.Error -> {
+                            android.util.Log.e("AuthVM", "Upload failed: ${result.message}")
+                            _uiState.update { 
+                                it.copy(
+                                    isLoading = false,
+                                    error = result.message ?: "Failed to upload image"
+                                )
+                            }
+                        }
+                        else -> {}
+                    }
+                } else {
+                    android.util.Log.e("AuthVM", "Failed to read bytes from URI")
+                    _uiState.update { it.copy(isLoading = false, error = "Failed to read image") }
+                }
+            } catch (e: Exception) {
+                android.util.Log.e("AuthVM", "Exception processing image", e)
+                _uiState.update { it.copy(isLoading = false, error = e.message ?: "Error processing image") }
+            }
+        }
     }
     
     fun signOut() {

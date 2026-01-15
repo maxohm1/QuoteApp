@@ -110,4 +110,12 @@ object AppModule {
     ): SettingsRepository {
         return SettingsRepositoryImpl(context)
     }
+
+    @Provides
+    @Singleton
+    fun provideStorageRepository(
+        supabaseClient: SupabaseClient
+    ): max.ohm.quoteapp.domain.repository.StorageRepository {
+        return max.ohm.quoteapp.data.repository.StorageRepositoryImpl(supabaseClient)
+    }
 }

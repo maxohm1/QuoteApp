@@ -1,5 +1,6 @@
 package max.ohm.quoteapp.presentation.profile
 
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,6 +38,11 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.TextButton
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -59,6 +65,11 @@ import max.ohm.quoteapp.presentation.auth.AuthViewModel
 import max.ohm.quoteapp.presentation.components.PrimaryButton
 import max.ohm.quoteapp.presentation.components.SecondaryButton
 
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
@@ -72,6 +83,30 @@ fun ProfileScreen(
     val isLoggedIn by viewModel.isLoggedIn.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
+    
+    var showFullScreenImage by remember { mutableStateOf(false) }
+
+    if (showFullScreenImage && currentUser?.avatarUrl != null) {
+        Dialog(
+            onDismissRequest = { showFullScreenImage = false },
+            properties = DialogProperties(usePlatformDefaultWidth = false)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black)
+                    .clickable { showFullScreenImage = false },
+                contentAlignment = Alignment.Center
+            ) {
+                AsyncImage(
+                    model = currentUser?.avatarUrl,
+                    contentDescription = "Full Screen Avatar",
+                    modifier = Modifier.fillMaxWidth(),
+                    contentScale = ContentScale.Fit
+                )
+            }
+        }
+    }
 
     if (uiState.showEditProfileDialog) {
         EditProfileDialog(
@@ -80,6 +115,7 @@ fun ProfileScreen(
             displayNameError = uiState.displayNameError,
             onDisplayNameChange = viewModel::updateDisplayName,
             onAvatarUrlChange = viewModel::updateNewAvatarUrl,
+            onAvatarPicked = viewModel::onAvatarPicked,
             onDismiss = viewModel::hideEditProfileDialog,
             onSave = viewModel::updateProfile,
             isLoading = uiState.isLoading
@@ -134,7 +170,12 @@ fun ProfileScreen(
                     modifier = Modifier
                         .size(100.dp)
                         .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.primaryContainer),
+                        .background(MaterialTheme.colorScheme.primaryContainer)
+                        .clickable { 
+                            if (currentUser?.avatarUrl != null) {
+                                showFullScreenImage = true 
+                            }
+                        },
                     contentAlignment = Alignment.Center
                 ) {
                     if (currentUser?.avatarUrl != null) {
@@ -354,10 +395,21 @@ private fun EditProfileDialog(
     displayNameError: String?,
     onDisplayNameChange: (String) -> Unit,
     onAvatarUrlChange: (String) -> Unit,
+    onAvatarPicked: (Uri) -> Unit,
     onDismiss: () -> Unit,
     onSave: () -> Unit,
     isLoading: Boolean
 ) {
+    val photoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { uri ->
+            android.util.Log.d("ProfileScreen", "PhotoPicker result: $uri")
+            if (uri != null) {
+                onAvatarPicked(uri)
+            }
+        }
+    )
+
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
@@ -368,13 +420,19 @@ private fun EditProfileDialog(
         },
         text = {
             Column {
-                // Avatar Preview
+                // Avatar Preview and Picker
                 Box(
                     modifier = Modifier
-                        .size(80.dp)
+                        .size(90.dp)
                         .clip(CircleShape)
                         .background(MaterialTheme.colorScheme.surfaceVariant)
-                        .align(Alignment.CenterHorizontally),
+                        .align(Alignment.CenterHorizontally)
+                        .clickable {
+                            android.util.Log.d("ProfileScreen", "Launching photo picker")
+                            photoPickerLauncher.launch(
+                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                            )
+                        },
                     contentAlignment = Alignment.Center
                 ) {
                     if (avatarUrl.isNotBlank()) {
@@ -390,6 +448,21 @@ private fun EditProfileDialog(
                             contentDescription = null,
                             modifier = Modifier.size(40.dp),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    
+                    // Edit Overlay
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color.Black.copy(alpha = 0.3f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = "Change Picture",
+                            tint = androidx.compose.ui.graphics.Color.White,
+                            modifier = Modifier.size(24.dp)
                         )
                     }
                 }

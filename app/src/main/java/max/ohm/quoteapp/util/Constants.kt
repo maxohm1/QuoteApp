@@ -8,6 +8,9 @@ object Constants {
     const val TABLE_COLLECTION_QUOTES = "collection_quotes"
     const val TABLE_USER_PROFILES = "user_profiles"
     const val TABLE_USER_SETTINGS = "user_settings"
+    
+    // Storage Buckets
+    const val BUCKET_AVATARS = "avatars"
 
     // DataStore Keys
     const val DATASTORE_SETTINGS = "settings"
