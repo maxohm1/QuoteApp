@@ -1,17 +1,25 @@
 package max.ohm.quoteapp.util
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.PeriodicWorkRequestBuilder
+import android.content.Intent
+import android.os.Build
 import androidx.work.WorkManager
-import max.ohm.quoteapp.worker.DailyQuoteWorker
+import max.ohm.quoteapp.receiver.AlarmReceiver
 import java.util.Calendar
-import java.util.concurrent.TimeUnit
 
 object NotificationScheduler {
     
+    const val EXTRA_TIME = "extra_time"
+    private const val ALARM_REQUEST_CODE = 1001
+    
     fun scheduleDailyQuote(context: Context, timeStr: String) {
-        val workManager = WorkManager.getInstance(context)
+        // 1. Cancel legacy WorkManager job if any
+        WorkManager.getInstance(context).cancelUniqueWork(Constants.DAILY_QUOTE_WORK_NAME)
+
+        // 2. Schedule Alarm
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         
         try {
             val parts = timeStr.split(":")
@@ -26,31 +34,51 @@ object NotificationScheduler {
                 set(Calendar.MILLISECOND, 0)
             }
             
-            if (target.before(now)) {
+            // If the target time is in the past, schedule for tomorrow
+            if (target.timeInMillis <= now.timeInMillis) {
                 target.add(Calendar.DAY_OF_YEAR, 1)
             }
             
-            val initialDelay = target.timeInMillis - now.timeInMillis
+            val intent = Intent(context, AlarmReceiver::class.java).apply {
+                putExtra(EXTRA_TIME, timeStr)
+            }
             
-            val workRequest = PeriodicWorkRequestBuilder<DailyQuoteWorker>(
-                1, TimeUnit.DAYS
+            val pendingIntent = PendingIntent.getBroadcast(
+                context, 
+                ALARM_REQUEST_CODE, 
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
-            .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
-            .build()
             
-            workManager.enqueueUniquePeriodicWork(
-                Constants.DAILY_QUOTE_WORK_NAME,
-                ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
-                workRequest
-            )
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (alarmManager.canScheduleExactAlarms()) {
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, target.timeInMillis, pendingIntent)
+                } else {
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, target.timeInMillis, pendingIntent)
+                }
+            } else {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, target.timeInMillis, pendingIntent)
+            }
             
         } catch (e: Exception) {
             e.printStackTrace()
-            // Fallback default
         }
     }
     
     fun cancelDailyQuote(context: Context) {
+        // Cancel WorkManager
         WorkManager.getInstance(context).cancelUniqueWork(Constants.DAILY_QUOTE_WORK_NAME)
+        
+        // Cancel Alarm
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, AlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context, 
+            ALARM_REQUEST_CODE, 
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        alarmManager.cancel(pendingIntent)
+        pendingIntent.cancel()
     }
 }

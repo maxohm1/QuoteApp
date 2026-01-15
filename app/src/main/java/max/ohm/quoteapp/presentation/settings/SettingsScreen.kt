@@ -306,7 +306,7 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.height(8.dp))
             
             Text(
-                text = "Made with ❤️ using AI",
+                text = "",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
