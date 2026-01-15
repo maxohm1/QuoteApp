@@ -219,6 +219,17 @@ Here's what's not perfect yet:
 
 
 
+## Sturcture 
+![WhatsApp Image 2026-01-15 at 11 03 51 AM](https://github.com/user-attachments/assets/0ddae80b-51de-4dd2-8f32-3f3d86cc33b7)
+<img width="1000" height="700" alt="Screenshot (1007)" src="https://github.com/user-attachments/assets/034f3ba9-5ff2-40fa-a5da-b7a2040eee74" />
+<img width="1920" height="1080" alt="Screenshot (1003)" src="https://github.com/user-attachments/assets/157fce21-a8bc-42aa-bbeb-dac01f51e025" />
+<img width="1920" height="1080" alt="Screenshot (1008)" src="https://github.com/user-attachments/assets/4018c7b9-47d9-4fa9-8f46-83a8f841650d" />
+
+ 
+---
+
+
+
 
 <div align="center">
 
