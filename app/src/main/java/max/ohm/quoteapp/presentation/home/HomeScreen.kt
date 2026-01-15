@@ -114,7 +114,7 @@ fun HomeScreen(
                                     )
                                 } else {
                                     Text(
-                                        text = "✨",
+                                        text = "",
                                         fontSize = 28.sp
                                     )
                                     Spacer(modifier = Modifier.width(8.dp))

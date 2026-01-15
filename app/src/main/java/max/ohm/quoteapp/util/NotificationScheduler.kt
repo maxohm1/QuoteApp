@@ -39,9 +39,22 @@ object NotificationScheduler {
                 target.add(Calendar.DAY_OF_YEAR, 1)
             }
             
-            val intent = Intent(context, AlarmReceiver::class.java).apply {
-                putExtra(EXTRA_TIME, timeStr)
+            val intent = Intent(context, AlarmReceiver::class.java)
+            
+            // Cancel any existing pending intent to ensure extras are updated cleanly
+            val oldPendingIntent = PendingIntent.getBroadcast(
+                context, 
+                ALARM_REQUEST_CODE, 
+                intent,
+                PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+            )
+            if (oldPendingIntent != null) {
+                alarmManager.cancel(oldPendingIntent)
+                oldPendingIntent.cancel()
             }
+            
+            // Add extra for recursion
+            intent.putExtra(EXTRA_TIME, timeStr)
             
             val pendingIntent = PendingIntent.getBroadcast(
                 context, 

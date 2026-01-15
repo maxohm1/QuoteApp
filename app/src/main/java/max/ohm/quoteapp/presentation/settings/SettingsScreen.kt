@@ -297,7 +297,7 @@ fun SettingsScreen(
             
             // App Info
             Text(
-                text = "QuoteVault v1.0.0",
+                text = "",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
