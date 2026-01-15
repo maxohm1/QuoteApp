@@ -1,4 +1,4 @@
-# QuoteVault 📱✨
+# QuoteVault
 
 Hey there! Welcome to **QuoteVault** - a beautiful quote app I built using Kotlin and Jetpack Compose. It's like having a pocket full of inspiration that you can carry with you everywhere!
 
@@ -6,36 +6,36 @@ Hey there! Welcome to **QuoteVault** - a beautiful quote app I built using Kotli
 
 QuoteVault helps you discover, save, and share inspiring quotes. Here's what you can do with it:
 
-### 🔐 User Accounts
+###  User Accounts
 - Sign up with your email and password
 - Login and stay logged in (no need to login every time!)
 - Forgot your password? No worries, you can reset it
 - Customize your profile with your name
 
-### 📖 Browse Quotes
+###  Browse Quotes
 - See a beautiful feed of quotes on the home screen
 - Browse quotes by category (Motivation, Love, Success, Wisdom, Humor, and more!)
 - Search for quotes by keyword or author name
 - Pull down to refresh and get new quotes
 
-### ❤️ Save Your Favorites
+###  Save Your Favorites
 - Tap the heart button to save quotes you love
 - See all your favorite quotes in one place
 - Create your own collections (like "Morning Motivation" or "Work Inspiration")
 - Your favorites sync across devices when you're logged in
 
-### 🔔 Daily Inspiration
+###  Daily Inspiration
 - Get a fresh "Quote of the Day" every morning
 - Set a notification to remind you at your preferred time
 - Never miss your daily dose of inspiration!
 
-### 📤 Share With Friends
+###  Share With Friends
 - Share quotes as text to WhatsApp, Instagram, or anywhere
 - Create beautiful quote cards with styled backgrounds
 - Save quote images to your phone
 - Choose from 6 different card designs
 
-### 🎨 Make It Yours
+###  Make It Yours
 - Switch between Dark and Light mode
 - Pick your favorite accent color (Purple, Blue, Teal, Orange, or Pink)
 - Adjust the font size to your liking
@@ -43,7 +43,7 @@ QuoteVault helps you discover, save, and share inspiring quotes. Here's what you
 
 ---
 
-## 🚀 How to Set Up This Project
+##  How to Set Up This Project
 
 ### What You'll Need
 - **Android Studio** (Hedgehog version or newer)
@@ -140,11 +140,11 @@ SUPABASE_ANON_KEY=your-anon-key-here
 
 - Click the green "Run" button in Android Studio
 - Choose your phone or emulator
-- That's it! The app should start running 🎉
+- Hit the play button
 
 ---
 
-## 🤖 How I Built This with AI
+##  How I Built This with AI
 
 I used AI tools to help me build this app faster and write better code. Here's my approach:
 
@@ -152,7 +152,7 @@ I used AI tools to help me build this app faster and write better code. Here's m
 
 | Tool | What I Used It For |
 |------|-------------------|
-| **Google Gemini (Antigravity)** | Main coding assistant - helped with architecture, debugging, and features |
+| **Google Antigravity(Gemini 3 pro and Claude opus 4.5 thinking)** | Main coding assistant - helped with architecture, debugging, and features |
 | **GitHub Copilot** | Code completion and quick suggestions while typing |
 
 ### My AI Workflow
@@ -161,7 +161,6 @@ I used AI tools to help me build this app faster and write better code. Here's m
 2. **Write Code Together** - AI helped me write the tricky parts like authentication, database queries, and animations
 3. **Fix Bugs Quickly** - When something broke, AI helped me figure out why and fix it fast
 4. **Polish the UI** - AI suggested animations and styling to make the app feel premium
-5. **Write Documentation** - This README was written with AI help too!
 
 ### What Worked Well
 - AI was great at boilerplate code (stuff that's repetitive)
@@ -171,7 +170,7 @@ I used AI tools to help me build this app faster and write better code. Here's m
 
 ---
 
-## 🎨 Design
+##  Design
 
 The app has a clean, modern look with:
 - Smooth animations when you tap cards
@@ -181,14 +180,15 @@ The app has a clean, modern look with:
 - Beautiful gradient quote cards
 
 **Design Tools Used:**
-- The UI was inspired by modern Material Design 3 guidelines
-- Animations were implemented using Jetpack Compose animation APIs
-
-*(No Figma/Stitch designs were used - the UI was built iteratively with code)*
+- The UI was designed using Google Stitch by writing modern, professional UI prompts for each screen and refining them through 2–3 iterations also have screenshot.
+- For each screen, I copied the generated HTML layout from Stitch and used Antigravity AI to convert it into Kotlin (Jetpack Compose) code.
+- Minor light and dark mode inconsistencies from the generated designs were manually corrected during implementation.
+- The final UI follows Material Design 3 guidelines and uses Jetpack Compose animation APIs for smooth interactions.
+- here is the link of Stitch https://stitch.withgoogle.com/projects/9863324927037199544
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 Here's what's under the hood:
 
@@ -207,45 +207,38 @@ Here's what's under the hood:
 
 ---
 
-## ⚠️ Known Limitations & Incomplete Features
+##  Known Limitations & Incomplete Features
 
 Here's what's not perfect yet:
 
-1. **Notifications on some phones** - On Realme, Xiaomi, and other Chinese phones, you might need to disable battery optimization for notifications to work reliably
+1. **Widget refresh** - The home screen widget updates once a day, not in real-time
 
-2. **Widget refresh** - The home screen widget updates once a day, not in real-time
-
-3. **Time picker format** - The notification time picker uses 24-hour format only
-
-4. **Avatar upload** - Profile picture upload isn't implemented yet (shows default avatar)
-
-5. **Offline mode** - The app needs internet to fetch quotes (local caching is basic)
-
-6. **Quote of the Day** - Sometimes takes a moment to load on first open
+2. **Time picker format** - The notification time picker uses 24-hour format only
 
 ---
 
-## 📁 Project Structure
 
-```
-app/src/main/java/max/ohm/quoteapp/
-├── data/           → Database and API stuff
-├── di/             → Dependency injection setup
-├── domain/         → Business logic and models
-├── presentation/   → All the screens and UI
-├── ui/theme/       → Colors, fonts, and theming
-├── util/           → Helper functions
-├── widget/         → Home screen widget
-├── worker/         → Background jobs
-└── receiver/       → Broadcast receivers (alarms)
-```
+
+
+<div align="center">
+
+**This Assignment takes my time and effort please consider it.
+Check Out <img src="https://images.emojiterra.com/google/noto-emoji/animated-emoji/2764.gif" height="30" alt="love" /> More <img src="https://github.com/maxohm1/OneAI-ScreenShot/blob/main/200w.gif" height="40" />**
+
+<br><br>
+
+<a href="https://www.linkedin.com/in/om-prakash-mandal-a253a12a6/" target="_blank">
+    <img src="https://github.com/maxohm1/OneAI-ScreenShot/blob/main/372102050_LINKEDIN_ICON_TRANSPARENT_1080.gif" width="150" />
+</a>
+
+<a href="https://play.google.com/store/apps/details?id=max.ohm.oneai&hl=en" target="_blank">
+    <img src="https://user-images.githubusercontent.com/74038190/212281763-e6ecd7ef-c4aa-45b6-a97c-f33f6bb592bd.gif" width="100" />
+</a>
+
+<a href="https://omportfolio-liard.vercel.app" target="_blank">
+    <img src="https://cdn.dribbble.com/userupload/28117148/file/original-c0db2041822a946b9529b5ae1fdf08e8.gif" width="140" />
+</a>
 
 ---
 
-## 📄 License
 
-This project was built for learning and assessment purposes.
-
----
-
-Made with ❤️ and a lot of AI help!
