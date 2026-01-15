@@ -219,7 +219,7 @@ Here's what's not perfect yet:
 
 
 
-## Sturcture 
+## Sturcture and Supabase
 ![WhatsApp Image 2026-01-15 at 11 03 51 AM](https://github.com/user-attachments/assets/0ddae80b-51de-4dd2-8f32-3f3d86cc33b7)
 <img width="1000" height="700" alt="Screenshot (1007)" src="https://github.com/user-attachments/assets/034f3ba9-5ff2-40fa-a5da-b7a2040eee74" />
 <img width="1920" height="1080" alt="Screenshot (1003)" src="https://github.com/user-attachments/assets/157fce21-a8bc-42aa-bbeb-dac01f51e025" />
