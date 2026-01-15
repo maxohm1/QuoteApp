@@ -230,6 +230,14 @@ Here's what's not perfect yet:
 
 
 
+## Loom Video
+this is the limit of 5 min that why i made in two parts 
+https://www.loom.com/share/dad49181120446599cfda92085b98e72
+https://www.loom.com/share/647110b6f97449cc9a3f8be61b34d40d
+ 
+---
+
+
 
 <div align="center">
 
