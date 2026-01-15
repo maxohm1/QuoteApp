@@ -125,7 +125,7 @@ fun MainNavigation(
                 exit = slideOutVertically(targetOffsetY = { it }) + fadeOut()
             ) {
                 NavigationBar(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = Color.Transparent
                 ) {
                     bottomNavItems.forEach { item ->
                         val isSelected = currentDestination?.hasRoute(item.route::class) == true
