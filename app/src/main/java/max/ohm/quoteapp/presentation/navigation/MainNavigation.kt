@@ -297,8 +297,14 @@ fun MainNavigation(
             
             composable<Screen.CategoryQuotes> { backStackEntry ->
                 val categoryQuotes: Screen.CategoryQuotes = backStackEntry.toRoute()
-                // For now, navigate back - could add a dedicated category screen
+                val category = try {
+                    QuoteCategory.valueOf(categoryQuotes.category)
+                } catch (e: IllegalArgumentException) {
+                    null
+                }
+                
                 HomeScreen(
+                    initialCategory = category,
                     onNavigateToCategory = { },
                     onNavigateToQuoteDetail = { quoteId ->
                         navController.navigate(Screen.QuoteDetail(quoteId))

@@ -54,11 +54,18 @@ fun HomeScreen(
     onNavigateToQuoteDetail: (String) -> Unit,
     onNavigateToShare: (String) -> Unit,
     onAddToCollection: (String) -> Unit,
+    initialCategory: QuoteCategory? = null,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val settings by viewModel.settings.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
+    
+    LaunchedEffect(initialCategory) {
+        if (initialCategory != null) {
+            viewModel.selectCategory(initialCategory)
+        }
+    }
     
     LaunchedEffect(Unit) {
         viewModel.events.collectLatest { event ->
@@ -98,93 +105,110 @@ fun HomeScreen(
                             Row(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(
-                                    text = "✨",
-                                    fontSize = 28.sp
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(
-                                    text = "QuoteVault",
-                                    style = MaterialTheme.typography.headlineMedium,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.primary
-                                )
+                                if (initialCategory != null) {
+                                    Text(
+                                        text = "${initialCategory.displayName} Quotes",
+                                        style = MaterialTheme.typography.headlineMedium,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                } else {
+                                    Text(
+                                        text = "✨",
+                                        fontSize = 28.sp
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(
+                                        text = "QuoteVault",
+                                        style = MaterialTheme.typography.headlineMedium,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                }
                             }
                             
-                            Spacer(modifier = Modifier.height(4.dp))
-                            
-                            Text(
-                                text = "Discover inspiring quotes",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
+                            if (initialCategory == null) {
+                                Spacer(modifier = Modifier.height(4.dp))
+                                
+                                Text(
+                                    text = "Discover inspiring quotes",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
                         }
                     }
                     
                     // Search Bar
-                    item {
-                        SearchBar(
-                            query = uiState.searchQuery,
-                            onQueryChange = viewModel::updateSearchQuery,
-                            onSearch = { },
-                            modifier = Modifier.padding(horizontal = 20.dp)
-                        )
-                        Spacer(modifier = Modifier.height(24.dp))
+                    if (initialCategory == null) {
+                        item {
+                            SearchBar(
+                                query = uiState.searchQuery,
+                                onQueryChange = viewModel::updateSearchQuery,
+                                onSearch = { },
+                                modifier = Modifier.padding(horizontal = 20.dp)
+                            )
+                            Spacer(modifier = Modifier.height(24.dp))
+                        }
                     }
                     
                     // Daily Quote (only show if not searching)
-                    item {
-                        AnimatedVisibility(
-                            visible = uiState.searchQuery.isBlank() && uiState.dailyQuote != null,
-                            enter = fadeIn(),
-                            exit = fadeOut()
-                        ) {
-                            uiState.dailyQuote?.let { quote ->
-                                Column(modifier = Modifier.padding(horizontal = 20.dp)) {
-                                    DailyQuoteCard(
-                                        quote = quote,
-                                        onFavoriteClick = { viewModel.toggleFavorite(quote) },
-                                        onShareClick = { onNavigateToShare(quote.id) },
-                                        onClick = { onNavigateToQuoteDetail(quote.id) },
-                                        fontSizeScale = settings.fontSize.scale
-                                    )
-                                    Spacer(modifier = Modifier.height(24.dp))
+                    if (initialCategory == null) {
+                        item {
+                            AnimatedVisibility(
+                                visible = uiState.searchQuery.isBlank() && uiState.dailyQuote != null,
+                                enter = fadeIn(),
+                                exit = fadeOut()
+                            ) {
+                                uiState.dailyQuote?.let { quote ->
+                                    Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+                                        DailyQuoteCard(
+                                            quote = quote,
+                                            onFavoriteClick = { viewModel.toggleFavorite(quote) },
+                                            onShareClick = { onNavigateToShare(quote.id) },
+                                            onClick = { onNavigateToQuoteDetail(quote.id) },
+                                            fontSizeScale = settings.fontSize.scale
+                                        )
+                                        Spacer(modifier = Modifier.height(24.dp))
+                                    }
                                 }
                             }
                         }
                     }
                     
                     // Categories (only show if not searching)
-                    item {
-                        AnimatedVisibility(
-                            visible = uiState.searchQuery.isBlank(),
-                            enter = fadeIn(),
-                            exit = fadeOut()
-                        ) {
-                            Column {
-                                Text(
-                                    text = "Browse by Category",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.SemiBold,
-                                    modifier = Modifier.padding(horizontal = 20.dp)
-                                )
-                                
-                                Spacer(modifier = Modifier.height(12.dp))
-                                
-                                LazyRow(
-                                    contentPadding = PaddingValues(horizontal = 20.dp),
-                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                                ) {
-                                    items(QuoteCategory.entries) { category ->
-                                        CategoryCard(
-                                            category = category,
-                                            quoteCount = uiState.categoryCounts[category] ?: 0,
-                                            onClick = { onNavigateToCategory(category) }
-                                        )
+                    if (initialCategory == null) {
+                        item {
+                            AnimatedVisibility(
+                                visible = uiState.searchQuery.isBlank(),
+                                enter = fadeIn(),
+                                exit = fadeOut()
+                            ) {
+                                Column {
+                                    Text(
+                                        text = "Browse by Category",
+                                        style = MaterialTheme.typography.titleMedium,
+                                        fontWeight = FontWeight.SemiBold,
+                                        modifier = Modifier.padding(horizontal = 20.dp)
+                                    )
+                                    
+                                    Spacer(modifier = Modifier.height(12.dp))
+                                    
+                                    LazyRow(
+                                        contentPadding = PaddingValues(horizontal = 20.dp),
+                                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                    ) {
+                                        items(QuoteCategory.entries) { category ->
+                                            CategoryCard(
+                                                category = category,
+                                                quoteCount = uiState.categoryCounts[category] ?: 0,
+                                                onClick = { onNavigateToCategory(category) }
+                                            )
+                                        }
                                     }
+                                    
+                                    Spacer(modifier = Modifier.height(24.dp))
                                 }
-                                
-                                Spacer(modifier = Modifier.height(24.dp))
                             }
                         }
                     }
@@ -194,6 +218,8 @@ fun HomeScreen(
                         Text(
                             text = if (uiState.searchQuery.isNotBlank()) 
                                 "Search Results" 
+                            else if (initialCategory != null)
+                                "Filtered Quotes"
                             else 
                                 "All Quotes",
                             style = MaterialTheme.typography.titleMedium,
